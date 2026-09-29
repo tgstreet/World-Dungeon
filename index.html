@@ -124,10 +124,10 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
 .a2hs{font-size:13px;color:var(--gold);background:var(--glass);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:420px}
 .stick{width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.08) 0 44%,rgba(255,255,255,.04) 45%);border:2px solid var(--line);position:relative;touch-action:none}
 .knob{position:absolute;left:50%;top:50%;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a95,#ff4d5e 55%,#a51d2c);box-shadow:0 4px 12px rgba(0,0,0,.5)}
-.btns{display:grid;grid-template-columns:repeat(2,auto);gap:10px 14px}
+.btns{display:grid;grid-template-columns:repeat(3,auto);gap:10px 12px}
 .ab{width:68px;height:68px;border-radius:50%;border:0;font-family:var(--disp);font-size:15px;color:#140c05;box-shadow:0 5px 0 rgba(0,0,0,.5);touch-action:none}
 .ab.on{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.5)}
-.ab.a{background:#ffc933}.ab.b{background:#3fa7ff}.ab.s{background:#ff4d5e;color:#fff}.ab.p{background:#3a3450;color:#fff;font-size:12px}
+.ab.a{background:#ffc933;font-size:13px}.ab.k{background:#b58cff}.ab.b{background:#3fa7ff}.ab.s{background:#ff4d5e;color:#fff}.ab.p{background:#3a3450;color:#fff;font-size:12px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
@@ -149,9 +149,9 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
         <button class="press pulse" id="b-start">PRESS START</button>
         <div class="hs" id="hs"></div>
         <div class="legend">
-          <div><b>Controller</b>Stick or D-pad move · <kbd>X</kbd> attack · <kbd>A</kbd> jump · <kbd>B</kbd>/<kbd>Y</kbd> special · <kbd>Start</kbd> pause</div>
-          <div><b>Keyboard P1</b><kbd>WASD</kbd> move · <kbd>J</kbd> attack · <kbd>K</kbd> jump · <kbd>L</kbd> special</div>
-          <div><b>Keyboard P2</b><kbd>Arrows</kbd> move · <kbd>,</kbd> or <kbd>Num1</kbd> attack · <kbd>.</kbd>/<kbd>Num2</kbd> jump · <kbd>/</kbd>/<kbd>Num3</kbd> special</div>
+          <div><b>Controller</b>Stick or D-pad move · <kbd>X</kbd> punch · <kbd>Y</kbd> kick · <kbd>A</kbd> jump · <kbd>B</kbd> special · <kbd>Start</kbd> pause</div>
+          <div><b>Keyboard P1</b><kbd>WASD</kbd> move · <kbd>J</kbd> punch · <kbd>K</kbd> kick · <kbd>Space</kbd> jump · <kbd>L</kbd> special</div>
+          <div><b>Keyboard P2</b><kbd>Arrows</kbd> move · <kbd>,</kbd>/<kbd>Num1</kbd> punch · <kbd>.</kbd>/<kbd>Num2</kbd> kick · <kbd>Right Shift</kbd>/<kbd>Num0</kbd> jump · <kbd>/</kbd>/<kbd>Num3</kbd> special</div>
           <div><b>On your TV</b>Cast this browser tab, connect controllers to the computer, then press ⛶ for fullscreen.</div>
         </div>
         <div class="credit">A personal fan game inspired by Dungeon Crawler Carl by Matt Dinniman.</div>
@@ -162,13 +162,13 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
     <div class="layer" id="L-lobby" hidden>
       <div class="lobby">
         <div class="lob-head">
-          <div><h2>Join the crawl</h2><p>Press attack on a controller or keyboard to join. Pick a kit, dress your fighter, then ready up.</p></div>
+          <div><h2>Join the crawl</h2><p>Press punch on a controller or keyboard to join. Pick a kit, dress your fighter, then ready up.</p></div>
           <div class="padnote" id="padnote"></div>
         </div>
         <div class="slots" id="slots"></div>
         <div class="lob-foot">
           <button class="btn" id="b-lback">Back</button>
-          <span class="hint" id="lob-hint">Up/down picks a row · left/right changes it · attack readies up · jump backs out</span>
+          <span class="hint" id="lob-hint">Up/down picks a row · left/right changes it · punch readies up · B or Esc backs out</span>
           <button class="btn go" id="b-go" disabled>FIGHT!</button>
         </div>
       </div>
@@ -180,8 +180,8 @@ body{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   <div class="deck" id="deck">
     <div class="stick" id="stick"><div class="knob" id="knob"></div></div>
     <div class="btns">
-      <button class="ab p" data-btn="st">PAUSE</button><button class="ab s" data-btn="s">SPCL</button>
-      <button class="ab b" data-btn="b">JUMP</button><button class="ab a" data-btn="a">HIT</button>
+      <button class="ab p" data-btn="st">PAUSE</button><button class="ab s" data-btn="s">SPCL</button><button class="ab k" data-btn="k">KICK</button>
+      <span></span><button class="ab b" data-btn="b">JUMP</button><button class="ab a" data-btn="a">PUNCH</button>
     </div>
   </div>
 </div>
@@ -222,7 +222,7 @@ const SPC={
 };
 const SPD={nova:'Blasts everything nearby off its feet.',proj:'Fires down the lane.',shield:'Untouchable for a few seconds; anything touching you gets hurt.',dash:'Charges through a crowd.',summon:'Companions stampede across the screen.',heal:'Big heal for you and nearby teammates.',lucky:'A random special.'};
 const KITS=[
-  {name:'Carl',arch:'Brawler',st:{STR:8,INT:4,CON:7,DEX:6,CHA:6},sp:'boom'},
+  {name:'Carl',arch:'Brawler',st:{STR:8,INT:4,CON:7,DEX:6,CHA:6},sp:'boom',gear:'gauntlet',kick:'stomp'},
   {name:'Princess Donut',arch:'Showcat caster',st:{STR:3,INT:9,CON:4,DEX:8,CHA:9},sp:'missile'},
   {name:'Katia Grim',arch:'Shapeshifter tank',st:{STR:6,INT:4,CON:9,DEX:4,CHA:5},sp:'harden'},
   {name:'Hekla',arch:'Shieldmaiden',st:{STR:8,INT:4,CON:8,DEX:6,CHA:6},sp:'bash'},
@@ -238,7 +238,7 @@ const KITS=[
   {name:'Louis',arch:'Wildcard',st:{STR:6,INT:4,CON:6,DEX:6,CHA:9},sp:'lucky'},
   {name:'Prepotente',arch:'Menace',st:{STR:7,INT:7,CON:6,DEX:6,CHA:5},sp:'headbutt'},
   {name:'Bautista',arch:'Veteran',st:{STR:7,INT:5,CON:7,DEX:7,CHA:5},sp:'aimed'},
-  {name:'Custom Brawler',arch:'Custom class',st:{STR:9,INT:3,CON:7,DEX:6,CHA:5},sp:'haymaker'},
+  {name:'Custom Brawler',arch:'Custom class',st:{STR:9,INT:3,CON:7,DEX:6,CHA:5},sp:'haymaker',gear:'gauntlet'},
   {name:'Custom Mage',arch:'Custom class',st:{STR:3,INT:9,CON:5,DEX:7,CHA:6},sp:'blast'},
   {name:'Custom Cleric',arch:'Custom class',st:{STR:4,INT:8,CON:8,DEX:5,CHA:5},sp:'mend'},
   {name:'Custom Rogue',arch:'Custom class',st:{STR:6,INT:4,CON:5,DEX:9,CHA:6},sp:'double'},
@@ -369,6 +369,10 @@ const POSE={
   jkick:{lean:-.15,tl1:.4,sl1:-1.2,tl2:1.35,sl2:1.5,ua1:-.8,fa1:.2,ua2:.6,fa2:2,head:0,bob:0},
   hurt:{lean:-.38,tl1:-.2,sl1:.1,tl2:.28,sl2:.05,ua1:-.9,fa1:-.3,ua2:-.5,fa2:.4,head:-.3,bob:0},
   special:{lean:-.08,tl1:-.38,sl1:0,tl2:.38,sl2:0,ua1:2.7,fa1:3,ua2:2.5,fa2:2.9,head:-.15,bob:0},
+  atk3p:{lean:.32,tl1:-.5,sl1:-.1,tl2:.5,sl2:.15,ua1:.3,fa1:2.2,ua2:2.0,fa2:2.7,head:.1,bob:-1},
+  kick:{lean:-.26,tl1:-.06,sl1:.05,tl2:1.5,sl2:1.57,ua1:-.7,fa1:.5,ua2:.9,fa2:2,head:-.05,bob:0},
+  knee:{lean:-.12,tl1:-.08,sl1:.05,tl2:1.6,sl2:.15,ua1:-.9,fa1:-.2,ua2:1.1,fa2:1.9,head:-.05,bob:-2},
+  stomp:{lean:.22,tl1:-.45,sl1:-.1,tl2:.55,sl2:.05,ua1:-.6,fa1:.1,ua2:1.3,fa2:2.2,head:.15,bob:2},
   shoot:{lean:.06,tl1:-.3,sl1:0,tl2:.3,sl2:0,ua1:1.3,fa1:1.5,ua2:1.5,fa2:1.57,head:0,bob:0},
   dash:{lean:.45,tl1:-.9,sl1:-.3,tl2:.9,sl2:.3,ua1:-.6,fa1:.5,ua2:1.4,fa2:1.5,head:.2,bob:0}
 };
@@ -406,8 +410,8 @@ function drawHuman(x,L,P,t){
   const hc=pt(sh[0],sh[1],Math.PI+lean+(P.head||0)*.5,9);drawHead(x,L,hc[0],hc[1],P.head||0,t);
   // front arm
   limb3(x,L.top,aF[0],aF[1],aF[2],aw);
-  if(L.weapon)drawWeapon(x,L.weapon,aF[1],aF[2],L);
-  circ(x,aF[2][0],aF[2][1],3.8,L.skin);
+  if(L.weapon==='gauntlet')drawGauntlet(x,aF[1],aF[2]);
+  else{if(L.weapon)drawWeapon(x,L.weapon,aF[1],aF[2],L);circ(x,aF[2][0],aF[2][1],3.8,L.skin);}
   if(L.ghost)x.globalAlpha/=.85;
 }
 function drawHead(x,L,cx,cy,tilt,t){
@@ -486,6 +490,11 @@ function drawHead(x,L,cx,cy,tilt,t){
   }else if(H==='hood'){blob(x,()=>{x.arc(0,0,10,0,TAU);},C(L.top));ell(x,3,1,6,7,'#0d0610',false);circ(x,2,0,1,'#ffd23f',false);circ(x,5,0,1,'#ffd23f',false);}
   x.restore();
 }
+function drawGauntlet(x,e,h){const dx=h[0]-e[0],dy=h[1]-e[1],a=Math.atan2(dy,dx);x.save();x.translate(h[0],h[1]);x.rotate(a);
+  blob(x,()=>{x.moveTo(-8,-4.5);x.lineTo(-1,-5.5);x.lineTo(-1,5.5);x.lineTo(-8,4.5);x.closePath();},C('#8a8f9a'));
+  blob(x,()=>{x.roundRect?x.roundRect(-2,-6.5,11,13,4):x.rect(-2,-6.5,11,13);},grad(x,-6,6,'#e4e8ef','#8a92a0'));
+  if(!FLASH){x.fillStyle='#5a6070';for(let i=0;i<3;i++)x.fillRect(6,-5+i*4,3,2.5);x.fillStyle='rgba(255,255,255,.55)';x.fillRect(0,-5,5,2);x.fillStyle='#ffb000';x.beginPath();x.arc(2,0,1.6,0,TAU);x.fill();}
+  x.restore();}
 function drawWeapon(x,w,e,h,L){
   const dx=h[0]-e[0],dy=h[1]-e[1],l=Math.hypot(dx,dy)||1,ux=dx/l,uy=dy/l;
   const tip=(n)=>[h[0]+ux*n,h[1]+uy*n];
@@ -703,13 +712,13 @@ const AMB={dungeon:'ember',nest:'spore',city:'dust',subway:'dust',desert:'sand',
 /* =================== INPUT =================== */
 const keys=new Set();
 const DEV={};const PREV={};
-function blank(){return{l:0,r:0,u:0,d:0,a:0,b:0,s:0,st:0,ok:0,back:0};}
+function blank(){return{l:0,r:0,u:0,d:0,a:0,k:0,b:0,s:0,st:0,ok:0,back:0};}
 let padBlocked=false,padsSeen=0;
 const touchSt=blank();
 function kbState(id){const s=blank();const k=c=>keys.has(c);
   if(id==='kb1'){const arrows=!usedDevice('kb2');s.l=k('KeyA')||(arrows&&k('ArrowLeft'));s.r=k('KeyD')||(arrows&&k('ArrowRight'));s.u=k('KeyW')||(arrows&&k('ArrowUp'));s.d=k('KeyS')||(arrows&&k('ArrowDown'));
-    s.a=k('KeyJ')||k('KeyZ')||k('KeyF');s.b=k('KeyK')||k('KeyX')||k('KeyG')||k('Space');s.s=k('KeyL')||k('KeyC')||k('KeyH');s.st=k('Enter')||k('KeyP');s.ok=s.a||k('Enter')||k('Space');s.back=k('KeyK')||k('KeyX')||k('Escape');}
-  else{s.l=k('ArrowLeft');s.r=k('ArrowRight');s.u=k('ArrowUp');s.d=k('ArrowDown');s.a=k('Comma')||k('Numpad1')||k('Digit1');s.b=k('Period')||k('Numpad2')||k('Digit2');s.s=k('Slash')||k('Numpad3')||k('Digit3');s.st=k('NumpadEnter')||k('Backslash');s.ok=s.a||s.st;s.back=s.b;}
+    s.a=k('KeyJ')||k('KeyZ');s.k=k('KeyK')||k('KeyX');s.b=k('Space')||k('KeyI');s.s=k('KeyL')||k('KeyC');s.st=k('Enter')||k('KeyP');s.ok=s.a||k('Enter')||k('Space');s.back=k('Escape')||k('Backspace');}
+  else{s.l=k('ArrowLeft');s.r=k('ArrowRight');s.u=k('ArrowUp');s.d=k('ArrowDown');s.a=k('Comma')||k('Numpad1')||k('Digit1');s.k=k('Period')||k('Numpad2')||k('Digit2');s.b=k('ShiftRight')||k('Numpad0')||k('Digit0');s.s=k('Slash')||k('Numpad3')||k('Digit3');s.st=k('NumpadEnter')||k('Backslash');s.ok=s.a||s.st;s.back=k('Quote')||k('NumpadDecimal');}
   for(const q in s)s[q]=s[q]?1:0;return s;}
 function pollInput(){
   for(const id in DEV)PREV[id]={...DEV[id]};
@@ -717,7 +726,7 @@ function pollInput(){
   let pads=[];try{pads=navigator.getGamepads?Array.from(navigator.getGamepads()):[];}catch(e){padBlocked=true;pads=[];}
   let n=0;for(let i=0;i<4;i++){const p=pads[i];const id='pad'+i;if(!p||!p.connected){delete DEV[id];continue;}n++;
     const b=j=>p.buttons[j]&&(p.buttons[j].pressed||p.buttons[j].value>.5)?1:0;const ax=p.axes[0]||0,ay=p.axes[1]||0;
-    DEV[id]={l:ax<-.45||b(14)?1:0,r:ax>.45||b(15)?1:0,u:ay<-.45||b(12)?1:0,d:ay>.45||b(13)?1:0,a:b(2)|b(5)?1:0,b:b(0),s:b(1)|b(3)|b(7)?1:0,st:b(9),ok:b(0)|b(2)|b(9)?1:0,back:b(1)};}
+    DEV[id]={l:ax<-.45||b(14)?1:0,r:ax>.45||b(15)?1:0,u:ay<-.45||b(12)?1:0,d:ay>.45||b(13)?1:0,a:b(2)|b(5)?1:0,k:b(3)|b(4)?1:0,b:b(0),s:b(1)|b(7)|b(6)?1:0,st:b(9),ok:b(0)|b(2)|b(9)?1:0,back:b(1)};}
   padsSeen=n;
 }
 const tap=(id,k)=>DEV[id]&&DEV[id][k]&&!(PREV[id]&&PREV[id][k]);
@@ -743,7 +752,7 @@ const isTouch=matchMedia('(hover:none),(pointer:coarse)').matches;
 let state='title',slots=[null,null,null,null],lobbyCount=0;
 const ROWS=['Kit','Costume','Build','Skin','Hair','Style'];
 function newSlot(dev,i){return{dev,name:i===0?'Tom':'Player '+(i+1),kit:i===0?0:(i*3)%16,costume:i%COSTUMES.length,build:0,skin:(i+1)%SKINS.length,hair:i%HAIRC.length,style:i%HAIRS.length,row:0,ready:false,P:null,t:0,ph:0};}
-function lookOf(s){const c=COSTUMES[s.costume],b=BUILDS[s.build];return{...c,skin:SKINS[s.skin],hair:HAIRC[s.hair],hairStyle:HAIRS[s.style],head:'human',size:b.size,bulk:b.bulk};}
+function lookOf(s){const c=COSTUMES[s.costume],b=BUILDS[s.build];return{...c,skin:SKINS[s.skin],hair:HAIRC[s.hair],hairStyle:HAIRS[s.style],head:'human',size:b.size,bulk:b.bulk,weapon:KITS[s.kit].gear||null};}
 function devLabel(d){return d==='kb1'?'Keyboard 1':d==='kb2'?'Keyboard 2':d==='touch'?'Touch':'Controller '+(+d.slice(3)+1);}
 function joinDev(dev){if(slots.some(s=>s&&s.dev===dev))return;const i=slots.findIndex(s=>!s);if(i<0)return;slots[i]=newSlot(dev,i);sfx.get();renderLobby();}
 function slotChange(i,row,dir){const s=slots[i];if(!s)return;
@@ -756,13 +765,13 @@ function renderLobby(){
   if(state!=='lobby')return;
   const el=$('#slots');
   el.innerHTML=slots.map((s,i)=>{const pc=PCOL[i];
-    if(!s)return`<div class="slot" style="--pc:${pc}"><div class="stag">P${i+1}<small>OPEN</small></div><div class="empty"><div class="big">Press attack to join</div><div>Controller <kbd>X</kbd> or <kbd>A</kbd><br>Keyboard 1 <kbd>J</kbd> · Keyboard 2 <kbd>,</kbd></div>${isTouch&&!slots.some(x=>x&&x.dev==='touch')?`<button class="btn" data-join="${i}">Join with touch</button>`:''}</div></div>`;
-    const k=KITS[s.kit],sp=SPC[k.sp];
+    if(!s)return`<div class="slot" style="--pc:${pc}"><div class="stag">P${i+1}<small>OPEN</small></div><div class="empty"><div class="big">Press punch to join</div><div>Controller <kbd>X</kbd> or <kbd>A</kbd><br>Keyboard 1 <kbd>J</kbd> · Keyboard 2 <kbd>,</kbd></div>${isTouch&&!slots.some(x=>x&&x.dev==='touch')?`<button class="btn" data-join="${i}">Join with touch</button>`:''}</div></div>`;
+    const k=KITS[s.kit],sp=SPC[k.sp];const extra=(k.gear?' Fights with a gauntlet.':'')+(k.kick==='stomp'?' Kick is a Stomp that crushes downed enemies.':'');
     return`<div class="slot on${s.ready?' ready':''}" style="--pc:${pc}"><div class="stag">P${i+1}<small>${esc(devLabel(s.dev))}</small></div>
       <canvas class="pvw" data-pv="${i}" width="250" height="200"></canvas>
       <input class="nm" data-name="${i}" maxlength="12" value="${esc(s.name)}" aria-label="Player ${i+1} name">
       <div class="rows">${ROWS.map((r,ri)=>`<div class="row${s.row===ri&&!s.ready?' sel':''}"><span class="k">${r}</span><button data-ch="${i},${r},-1" aria-label="Previous ${r}">‹</button><span class="v">${esc(rowVal(s,r))}</span><button data-ch="${i},${r},1" aria-label="Next ${r}">›</button></div>`).join('')}</div>
-      <div class="sp">${esc(k.arch)} · Special <b>${esc(sp.name)}</b>. ${esc(SPD[sp.type])}</div>
+      <div class="sp">${esc(k.arch)} · Special <b>${esc(sp.name)}</b>. ${esc(SPD[sp.type])}${esc(extra)}</div>
       <button class="rdy" data-rdy="${i}">${s.ready?'READY!':'Ready up'}</button>
       <button class="btn" data-leave="${i}" style="padding:6px">Leave</button></div>`;}).join('');
   el.querySelectorAll('[data-join]').forEach(b=>b.onclick=()=>{audio();joinDev('touch');});
@@ -789,7 +798,7 @@ function lobbyTick(){
   }
   const joined=slots.filter(Boolean);
   if(joined.length&&joined.every(s=>s.ready)){lobbyCount++;if(lobbyCount===1)$('#lob-hint').textContent='Everyone is ready. Starting…';if(lobbyCount>90)startGame();}
-  else{if(lobbyCount){$('#lob-hint').textContent='Up/down picks a row · left/right changes it · attack readies up · jump backs out';}lobbyCount=0;}
+  else{if(lobbyCount){$('#lob-hint').textContent='Up/down picks a row · left/right changes it · punch readies up · B or Esc backs out';}lobbyCount=0;}
   // previews
   document.querySelectorAll('[data-pv]').forEach(cvs=>{const s=slots[+cvs.dataset.pv];if(!s)return;const x=cvs.getContext('2d');s.t++;x.setTransform(1,0,0,1,0,0);x.clearRect(0,0,250,200);
     const L=lookOf(s);x.setTransform(2.1*L.size,0,0,2.1*L.size,125,186);ell(x,0,0,16,4,'rgba(0,0,0,.35)',false);const P=animPose(s,s.ready?'special':'idle',.2);s.t=s.t;drawHuman(x,L,P,s.t);});
@@ -862,7 +871,7 @@ function hurtPlayer(p,dmg,src,kd){
   if(kd){p.st='down';p.t=0;p.vz=3;p.kbx=dir*2.6;p.jk=false;}else{p.st='hurt';p.t=0;p.x+=dir*4;}
   return true;
 }
-function playerOut(p){p.lives--;if(p.lives<0){p.out=true;p.st='out';sys(`${p.name} is out! ${np()>1?'Press attack to rejoin.':''}`);if(G.players.every(q=>q.out)){state='cont';G.cont=10*60;showOverlay('cont');}return;}
+function playerOut(p){p.lives--;if(p.lives<0){p.out=true;p.st='out';sys(`${p.name} is out! ${np()>1?'Press punch to rejoin.':''}`);if(G.players.every(q=>q.out)){state='cont';G.cont=10*60;showOverlay('cont');}return;}
   sys(`${p.name} is down! ${p.lives} ${p.lives===1?'life':'lives'} left.`);respawn(p);}
 function respawn(p){p.hp=maxHP(p);p.st='idle';p.z=0;p.vz=0;p.dying=false;p.out=false;p.inv=160;p.hype=Math.max(p.hype,50);p.x=clamp(p.x,G.cam+40,G.cam+VW-40);
   for(const e of G.E)if(alive(e)&&!e.boss&&Math.abs(e.x-p.x)<120){e.st='fall';e.t=0;e.vz=2.6;e.kvx=Math.sign(e.x-p.x||1)*3;}
@@ -922,6 +931,8 @@ function updPlayer(p){
   if(p.st==='hurt'){if(p.t>=15)p.st='idle';return;}
   if(state==='clear'){p.st=p.z>0?'jump':'idle';phys(p);return;}
   if(p.st==='special'){runSpecial(p);phys(p);return;}
+  if(p.st==='kick'){if(p.t===7)kickStrike(p);if(p.t>=22)p.st='idle';return;}
+  if(p.st==='stomp'){if(p.t===12)stompStrike(p);if(p.t>=28)p.st='idle';return;}
   if(p.st==='atk'){const dur=p.combo===3?22:14;if(p.t===5)strike(p);if(p.t>6&&pr('a'))p.comboQ=true;
     if(p.t>=dur){if(p.comboQ&&p.combo<3){p.combo++;p.t=0;p.comboQ=false;sfx.swing();}else{p.st='idle';p.combo=0;}}return;}
   const spd=(1.9+stat(p,'DEX')*.11)*(p.buffs.haste?1.4:1);const mx=I.r-I.l,my=I.d-I.u;
@@ -929,7 +940,8 @@ function updPlayer(p){
     if(pr('b')){p.vz=5.2;p.jvx=mx*spd*1.1;p.st='jump';p.jk=false;sfx.jump();}
     else if(pr('s')){if(p.hype>=50)startSpecial(p);else if(p.t%2===0)pop(p.x,p.y,'NEED HYPE','#8fb2d6',12);}
     else if(pr('a')){p.st='atk';p.t=0;p.combo=1;p.comboQ=false;sfx.swing();}
-  }else{p.x+=p.jvx;p.y+=my*spd*.4;if(pr('a')&&!p.jk){p.jk=true;p.jkHit=new Set();sfx.swing();}
+    else if(pr('k')){p.st=p.kit.kick==='stomp'?'stomp':'kick';p.t=0;sfx.swing();}
+  }else{p.x+=p.jvx;p.y+=my*spd*.4;if((pr('a')||pr('k'))&&!p.jk){p.jk=true;p.jkHit=new Set();sfx.swing();}
     if(p.jk){for(const e of G.E){if(!alive(e)||p.jkHit.has(e))continue;const dx=(e.x-p.x)*p.face;if(dx>-6&&dx<36+e.w&&Math.abs(e.y-p.y)<14){p.jkHit.add(e);hitEnemy(e,dmgOf(p)*1.35,p,{kd:true,kx:p.face});hitstop=4;}}
       for(const pr2 of G.props){const dx=(pr2.x-p.x)*p.face;if(dx>-6&&dx<40&&Math.abs(pr2.y-p.y)<14)breakProp(pr2,2);}}}
   phys(p);
@@ -939,6 +951,14 @@ function strike(p){const reach=p.combo===3?46:40;let any=false;
   for(const e of G.E){if(!alive(e))continue;const dx=(e.x-p.x)*p.face;if(dx>-6&&dx<reach+e.w&&Math.abs(e.y-p.y)<14&&e.z<30){if(hitEnemy(e,dmgOf(p)*(p.combo===3?1.6:1),p,{kd:p.combo===3,kx:p.face}))any=true;}}
   for(const pr of G.props){const dx=(pr.x-p.x)*p.face;if(dx>-6&&dx<reach+12&&Math.abs(pr.y-p.y)<14){breakProp(pr,1);any=true;}}
   if(any){hitstop=p.combo===3?6:3;if(p.combo===3){shake=Math.max(shake,4);sfx.big();}}}
+function kickStrike(p){let any=false;for(const e of G.E){if(!alive(e))continue;const dx=(e.x-p.x)*p.face;if(dx>-6&&dx<52+e.w&&Math.abs(e.y-p.y)<14&&e.z<30){if(hitEnemy(e,dmgOf(p)*1.3,p,{kd:Math.random()<.6,kx:p.face}))any=true;}}
+  for(const pr of G.props){const dx=(pr.x-p.x)*p.face;if(dx>-6&&dx<60&&Math.abs(pr.y-p.y)<14){breakProp(pr,2);any=true;}}if(any){hitstop=5;shake=Math.max(shake,3);sfx.big();}}
+function stompStrike(p){const fx=p.x+p.face*22;shake=Math.max(shake,8);sfx.big();pop(fx,p.y,'STOMP!','#ffc933',18);G.FX.push({k:'ring',x:fx,y:p.y,z:0,r:8,col:'#ffc933',life:18,grow:4});for(let i=0;i<6;i++)G.FX.push({k:'dust',x:fx+rnd(-18,18),y:p.y+rnd(-4,4),z:0,life:18});
+  const d=dmgOf(p)*1.6;let any=false;
+  for(const e of G.E){if(e.hp<=0||e.st==='dead')continue;if(Math.abs(e.x-fx)>34+e.w||Math.abs(e.y-p.y)>18)continue;
+    if(e.st==='down'||e.st==='getup'){const dd=Math.round(d*1.6*rnd(.9,1.1));e.hp-=dd;e.t=0;e.st='down';e.flash=4;num(e.x,e.y,dd,'#ffc933');spark(e.x,e.y,6,'#ffc933');G.combo++;G.comboT=110;G.score+=25;p.hype=Math.min(100,p.hype+5);any=true;if(e.hp<=0){e.st='dead';e.t=0;e.killer=p;onKill(e);}}
+    else if(alive(e)){if(hitEnemy(e,d,p,{kd:true,kx:p.face,col:'#ffc933'}))any=true;}}
+  for(const pr of G.props)if(Math.abs(pr.x-fx)<40&&Math.abs(pr.y-p.y)<18)breakProp(pr,2);if(any)hitstop=6;}
 function breakProp(pr,n){if(pr.hp<=0)return;pr.hp-=n;spark(pr.x,pr.y,16,'#e0a060');sfx.hit();
   if(pr.hp<=0){G.crates++;if(G.crates>=10)award('crates');pop(pr.x,pr.y,'SMASH!','#e0a060');G.score+=50;for(let i=0;i<8;i++)G.FX.push({k:'chip',x:pr.x,y:pr.y+rnd(-4,4),z:10,vx:rnd(-2.5,2.5),vz:rnd(2,4),life:50});
     const r=Math.random();G.items.push({x:pr.x,y:pr.y,kind:r<.55?'food':r<.85?'box':'coin'});}}
@@ -1081,7 +1101,7 @@ function drawItem(it){const[x,y]=S(it);const b=Math.sin(frame*.1+it.x)*2-4;g.sav
   else{glow(0,-10,22,'rgba(255,200,60,1)',.5);blob(g,()=>{g.rect(-9,-19,18,16);},grad(g,-19,-3,'#ffd75a','#d99a10'));g.fillStyle='#8a5a00';g.fillRect(-9,-13,18,3);g.fillRect(-1.5,-19,3,16);}
   g.restore();}
 function drawPlayer(p){const[x,y]=S(p);if(p.inv>0&&p.st!=='down'&&frame%6<3&&p.st!=='special')return;
-  let pose='idle';if(p.st==='walk')pose='walk';else if(p.st==='atk')pose=p.t<3?'wind':'atk'+p.combo;else if(p.st==='jump'||p.z>0)pose=p.jk?'jkick':'jump';
+  let pose='idle';if(p.st==='walk')pose='walk';else if(p.st==='atk')pose=p.t<3?'wind':(p.combo===3?'atk3p':'atk'+p.combo);else if(p.st==='kick')pose=p.t<5?'wind':'kick';else if(p.st==='stomp')pose=p.t<12?'knee':'stomp';else if(p.st==='jump'||p.z>0)pose=p.jk?'jkick':'jump';
   if(p.st==='hurt')pose='hurt';if(p.st==='down'||p.st==='getup')pose='hurt';if(p.st==='special'){const ty=p.cur.type;pose=ty==='dash'?'dash':ty==='proj'?'shoot':'special';}
   const P=animPose(p,pose,p.st==='atk'||p.st==='special'?.6:.35);
   const lying=p.st==='down'||(p.st==='getup'&&p.t<8);p.rot=lerp(p.rot,lying?1:0,.2);
@@ -1139,7 +1159,7 @@ function drawHUD(F){
     g.strokeStyle=col;g.lineWidth=2;g.beginPath();g.arc(x+19,y+20,14,0,TAU);g.stroke();
     text(p.name.toUpperCase(),x+38,y+10,10,col,'left',3);
     g.font=`9px ${FONT}`;g.textAlign='right';g.fillStyle='#fff';g.fillText(p.out?'':'x'+Math.max(0,p.lives),x+pw-6,y+10);
-    if(p.out){text(frame%50<30?'PRESS ATTACK':'',x+38+(pw-44)/2,y+27,10,'#fff','center',3);return;}
+    if(p.out){text(frame%50<30?'PRESS PUNCH':'',x+38+(pw-44)/2,y+27,10,'#fff','center',3);return;}
     const bw=pw-44,mh=maxHP(p);g.fillStyle='rgba(0,0,0,.6)';rrect(x+38,y+18,bw,7,3.5);g.fill();
     const hg=g.createLinearGradient(0,y+18,0,y+25);const low=p.hp/mh<.25;hg.addColorStop(0,low&&frame%20<10?'#fff':'#ff7a86');hg.addColorStop(1,'#d9283c');g.fillStyle=hg;rrect(x+38,y+18,Math.max(0,bw*p.hp/mh),7,3.5);g.fill();
     g.fillStyle='rgba(0,0,0,.6)';rrect(x+38,y+28,bw,4,2);g.fill();const ready=p.hype>=50;g.fillStyle=ready?(frame%20<10?'#3ee0ff':'#bff6ff'):'#2a7f94';rrect(x+38,y+28,bw*p.hype/100,4,2);g.fill();
@@ -1169,7 +1189,7 @@ function toLobby(){G=null;state='lobby';showLayer('L-lobby');$('#corner').hidden
 function pauseGame(){if(state!=='play')return;state='paused';showOverlay('pause');}
 function showOverlay(kind){showLayer('L-ovl');const b=$('#obox');
   if(kind==='pause')b.innerHTML=`<h2>PAUSED</h2><p>Floor ${FLOORS[G.fi].n} · ${esc(FLOORS[G.fi].name)}<br>${G.score.toLocaleString()} viewers</p><div class="row2"><button class="btn go" data-o="resume">Resume</button><button class="btn" data-o="mute">${muted?'Sound on':'Sound off'}</button><button class="btn" data-o="quit">Quit</button></div><p style="font-size:12px">Controller: <kbd>A</kbd> resume · <kbd>B</kbd> quit · Keyboard: <kbd>Enter</kbd> resume</p>`;
-  if(kind==='cont')b.innerHTML=`<h2>CONTINUE?</h2><p>The audience is voting.</p><div class="count" id="cnum">10</div><div class="row2"><button class="btn go" data-o="cont">Continue</button><button class="btn" data-o="end">Give up</button></div><p style="font-size:12px">Any player: attack to continue</p>`;
+  if(kind==='cont')b.innerHTML=`<h2>CONTINUE?</h2><p>The audience is voting.</p><div class="count" id="cnum">10</div><div class="row2"><button class="btn go" data-o="cont">Continue</button><button class="btn" data-o="end">Give up</button></div><p style="font-size:12px">Any player: punch to continue</p>`;
   if(kind==='over'){const hs=getHS();const best=G.players.slice().sort((a,b)=>b.kills-a.kills)[0];b.innerHTML=`<h2>GAME OVER</h2><div class="stats"><div><b>${FLOORS[G.fi].n}</b><span>Floor reached</span></div><div><b>${G.score.toLocaleString()}</b><span>Viewers</span></div><div><b>${G.maxCombo}</b><span>Best combo</span></div><div><b>${esc(best?best.name:'-')}</b><span>Most kills (${best?best.kills:0})</span></div></div><p>${G.score>=hs&&G.score>0?'New high score!':'High score: '+hs.toLocaleString()}</p><div class="row2"><button class="btn go" data-o="again">Play again</button><button class="btn" data-o="lobby">Change fighters</button></div>`;}
   b.querySelectorAll('[data-o]').forEach(x=>x.onclick=()=>ovl(x.dataset.o));const f=b.querySelector('.btn.go');if(f)f.focus();ovlKind=kind;}
 let ovlKind=null;

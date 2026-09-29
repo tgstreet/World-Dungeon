@@ -11,7 +11,7 @@ A personal couch co-op brawler inspired by *Dungeon Crawler Carl* by Matt Dinnim
 
 ## Controllers
 Pair Xbox, PlayStation or MFi controllers to the phone in Settings > Bluetooth.
-X attack · A jump · B/Y special · Start pause. Up to 4 players.
+X punch · Y kick · A jump · B special · Start pause. Up to 4 players.
 
 ## Play on Apple TV
 Pair controllers to the iPhone, open the game, then use Screen Mirroring from Control Center to AirPlay it to the TV.
