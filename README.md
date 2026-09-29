@@ -2,7 +2,7 @@
 
 A personal couch co-op brawler inspired by *Dungeon Crawler Carl* by Matt Dinniman. Made for fun, not for sale or distribution.
 
-**Play:** https://tgstreet.github.io/world-dungeon/
+**Play:** https://tgstreet.github.io/World-Dungeon/
 
 ## Install on iPhone
 1. Open the link above in Safari.
